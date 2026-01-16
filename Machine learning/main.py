@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import joblib  # To save the model
 import os
 
-# Load the dataset (use local draft.csv in the same directory)
+# Load the dataset
 data_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "draft.csv"))
 if not os.path.exists(data_path):
         raise FileNotFoundError(f"Dataset not found at {data_path}")
@@ -39,7 +39,7 @@ model.fit(X_train, y_train)
 # Save model and scaler
 joblib.dump(model, 'model.pkl')
 joblib.dump(scaler, 'scaler.pkl')
-print("Model saved as model.pkl")
+print("Model and scaler saved")
 
 # Evaluate
 y_pred = model.predict(X_test)
@@ -66,7 +66,7 @@ plt.grid(True)
 plt.savefig('roc_curve.png', bbox_inches='tight', dpi=150)
 plt.show()
 
-# Confusion Matrix (using matplotlib instead of seaborn)
+# Confusion Matrix
 plt.figure(figsize=(6,5))
 cm = confusion_matrix(y_test, y_pred)
 plt.imshow(cm, interpolation='nearest', cmap='Blues')
@@ -91,7 +91,7 @@ importances.sort_values(ascending=False).plot(kind='bar')
 plt.title('Feature Importance')
 plt.show()
 
-# Bonus: Predict on famous players
+# Predict on sample players
 print("\n=== Predictions on Top Players ===")
 examples = df[['Player_Name'] + features + ['Success']].head(10)
 examples_scaled = scaler.transform(examples[features])
@@ -121,5 +121,3 @@ print(all_players['Prediction_Label'].value_counts())
 print("\nTop 20 by predicted probability:")
 print(all_players[['Player_Name', 'Predicted_Prob', 'Prediction_Label']].sort_values(
     'Predicted_Prob', ascending=False).head(48).to_string(index=False))
-
-#end
